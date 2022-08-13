@@ -12,6 +12,11 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CropIcon from "@mui/icons-material/Crop";
 import TimerIcon from "@mui/icons-material/Timer";
 import SendIcon from "@mui/icons-material/Send";
+import { v4 as uuid } from "uuid";
+import { db, storage } from "./firebase";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+
 function Preview() {
   const cameraImage = useSelector(selectCameraImage);
   const navigate = useNavigate();
@@ -27,7 +32,31 @@ function Preview() {
     }
   }, [cameraImage]);
 
-  const sendPost = () => {};
+  const sendPost = () => {
+    const id = uuid();
+    const storageRef = ref(storage, `posts/${id}`);
+
+    uploadString(storageRef, cameraImage, "data_url").then((snapshot) => {
+      console.log("Uploaded a data_url string!");
+      getDownloadURL(storageRef)
+        .then((url) => {
+          console.log("download URL", url);
+          addDoc(collection(db, "posts"), {
+            imageUrl: url,
+            username: "me",
+            read: false,
+            //profile pic
+            timestamp: serverTimestamp(),
+          }).then((d) => {
+            console.log("Document written with ID: ", d.id);
+            navigate("/chats");
+          });
+        })
+        .catch((error) => {
+          // Handle any errors
+        });
+    });
+  };
   return (
     <div className="preview">
       <CloseIcon onClick={closePreview} className="preview__close" />
