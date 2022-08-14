@@ -45,7 +45,7 @@ function Preview() {
           console.log("download URL", url);
           addDoc(collection(db, "posts"), {
             imageUrl: url,
-            username: "me",
+            username: user.username,
             read: false,
             profilePic: user.profilePic,
             timestamp: serverTimestamp(),
