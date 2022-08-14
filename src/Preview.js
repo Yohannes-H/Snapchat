@@ -16,11 +16,13 @@ import { v4 as uuid } from "uuid";
 import { db, storage } from "./firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { selectUser } from "./features/appSlice";
 
 function Preview() {
   const cameraImage = useSelector(selectCameraImage);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
   const closePreview = () => {
     dispatch(resetCameraImage());
@@ -45,7 +47,7 @@ function Preview() {
             imageUrl: url,
             username: "me",
             read: false,
-            //profile pic
+            profilePic: user.profilePic,
             timestamp: serverTimestamp(),
           }).then((d) => {
             console.log("Document written with ID: ", d.id);

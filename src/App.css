@@ -6,3 +6,20 @@
   background-color: #fefc01;
   height: 100vh;
 }
+.app__body {
+  /* background: url();  this is the picture of the phone*/
+  no-repeat: center;
+  background-size: contain;
+  height: 400px;
+  width: 250px;
+  padding: 74px;
+}
+.app__bodyBackground {
+  background-color: white;
+  height: 400px;
+}
+
+.app__logo {
+  object-fit: contain;
+  height: 100px;
+}
